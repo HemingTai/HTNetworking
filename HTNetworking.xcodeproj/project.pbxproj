@@ -1,0 +1,318 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		760CAC971E5E72B000C102DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760CAC961E5E72B000C102DE /* AppDelegate.swift */; };
+		760CAC991E5E72B000C102DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760CAC981E5E72B000C102DE /* ViewController.swift */; };
+		760CAC9C1E5E72B000C102DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 760CAC9A1E5E72B000C102DE /* Main.storyboard */; };
+		760CAC9E1E5E72B000C102DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 760CAC9D1E5E72B000C102DE /* Assets.xcassets */; };
+		760CACA11E5E72B000C102DE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 760CAC9F1E5E72B000C102DE /* LaunchScreen.storyboard */; };
+		760CACAA1E5E737200C102DE /* HTNetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760CACA91E5E737200C102DE /* HTNetworkConfiguration.swift */; };
+		760CAE311E6029FB00C102DE /* HTHTTPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760CAE301E6029FB00C102DE /* HTHTTPRequest.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		760CAC931E5E72B000C102DE /* HTNetworking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HTNetworking.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		760CAC961E5E72B000C102DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		760CAC981E5E72B000C102DE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		760CAC9B1E5E72B000C102DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		760CAC9D1E5E72B000C102DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		760CACA01E5E72B000C102DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		760CACA21E5E72B000C102DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		760CACA91E5E737200C102DE /* HTNetworkConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTNetworkConfiguration.swift; sourceTree = "<group>"; };
+		760CAE301E6029FB00C102DE /* HTHTTPRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTHTTPRequest.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		760CAC901E5E72B000C102DE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		760CAC8A1E5E72AF00C102DE = {
+			isa = PBXGroup;
+			children = (
+				760CAC951E5E72B000C102DE /* HTNetworking */,
+				760CAC941E5E72B000C102DE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		760CAC941E5E72B000C102DE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				760CAC931E5E72B000C102DE /* HTNetworking.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		760CAC951E5E72B000C102DE /* HTNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				760CAC961E5E72B000C102DE /* AppDelegate.swift */,
+				760CAC981E5E72B000C102DE /* ViewController.swift */,
+				760CAC9A1E5E72B000C102DE /* Main.storyboard */,
+				760CAC9D1E5E72B000C102DE /* Assets.xcassets */,
+				760CAC9F1E5E72B000C102DE /* LaunchScreen.storyboard */,
+				760CACA21E5E72B000C102DE /* Info.plist */,
+				760CACA91E5E737200C102DE /* HTNetworkConfiguration.swift */,
+				760CAE301E6029FB00C102DE /* HTHTTPRequest.swift */,
+			);
+			path = HTNetworking;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		760CAC921E5E72B000C102DE /* HTNetworking */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 760CACA51E5E72B000C102DE /* Build configuration list for PBXNativeTarget "HTNetworking" */;
+			buildPhases = (
+				760CAC8F1E5E72B000C102DE /* Sources */,
+				760CAC901E5E72B000C102DE /* Frameworks */,
+				760CAC911E5E72B000C102DE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HTNetworking;
+			productName = HTNetworking;
+			productReference = 760CAC931E5E72B000C102DE /* HTNetworking.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		760CAC8B1E5E72AF00C102DE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0810;
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = Mr.Tai;
+				TargetAttributes = {
+					760CAC921E5E72B000C102DE = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = D33YTSRS2F;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 760CAC8E1E5E72AF00C102DE /* Build configuration list for PBXProject "HTNetworking" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 760CAC8A1E5E72AF00C102DE;
+			productRefGroup = 760CAC941E5E72B000C102DE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				760CAC921E5E72B000C102DE /* HTNetworking */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		760CAC911E5E72B000C102DE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				760CACA11E5E72B000C102DE /* LaunchScreen.storyboard in Resources */,
+				760CAC9E1E5E72B000C102DE /* Assets.xcassets in Resources */,
+				760CAC9C1E5E72B000C102DE /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		760CAC8F1E5E72B000C102DE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				760CAC991E5E72B000C102DE /* ViewController.swift in Sources */,
+				760CACAA1E5E737200C102DE /* HTNetworkConfiguration.swift in Sources */,
+				760CAC971E5E72B000C102DE /* AppDelegate.swift in Sources */,
+				760CAE311E6029FB00C102DE /* HTHTTPRequest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		760CAC9A1E5E72B000C102DE /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				760CAC9B1E5E72B000C102DE /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		760CAC9F1E5E72B000C102DE /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				760CACA01E5E72B000C102DE /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		760CACA31E5E72B000C102DE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		760CACA41E5E72B000C102DE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		760CACA61E5E72B000C102DE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = D33YTSRS2F;
+				INFOPLIST_FILE = HTNetworking/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.HemingTai.HTNetworking;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		760CACA71E5E72B000C102DE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = D33YTSRS2F;
+				INFOPLIST_FILE = HTNetworking/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.HemingTai.HTNetworking;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		760CAC8E1E5E72AF00C102DE /* Build configuration list for PBXProject "HTNetworking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				760CACA31E5E72B000C102DE /* Debug */,
+				760CACA41E5E72B000C102DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		760CACA51E5E72B000C102DE /* Build configuration list for PBXNativeTarget "HTNetworking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				760CACA61E5E72B000C102DE /* Debug */,
+				760CACA71E5E72B000C102DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 760CAC8B1E5E72AF00C102DE /* Project object */;
+}
