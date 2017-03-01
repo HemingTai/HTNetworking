@@ -10,6 +10,14 @@ import Foundation
 
 class HTHTTPRequest
 {
+    func dataTaskWithURL(baseUrl: URL, parameters: String, httpMethod: HTTPMethod, configuration:@escaping(ConfigurationHandler), completionHandler: URLRequestCompletionHandler) -> URLSessionDataTask
+    {
+        if baseUrl.absoluteString.lengthOfBytes(using: <#T##String.Encoding#>)
+        {
+            
+        }
+    }
+    
     + (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)baseURL
     parameters:(NSString *)parameters
     httpMethod:(HTTPMethod)method
@@ -23,7 +31,7 @@ class HTHTTPRequest
     switch (method) {
     case HTTPMethodGET: {
     /*
-     NSURL *baseURL = [NSURL URLWithString:@"http://example.com/v1/"];
+     URL *baseURL = [URL URLWithString:@"http://example.com/v1/"];
      [NSURL URLWithString:@"foo" relativeToURL:baseURL];  // http://example.com/v1/foo
      [NSURL URLWithString:@"foo?bar=baz" relativeToURL:baseURL];  //
      http://example.com/v1/foo?bar=baz

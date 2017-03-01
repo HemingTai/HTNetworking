@@ -13,15 +13,15 @@ enum HTTPMethod
     case HTTPMethodGET
     case HTTPMethodPOST
 }
-/*
- typedef void(^ConfigurationHandler)(NSMutableURLRequest *request);
- typedef void(^ProgressHandler)(NSProgress *progress);
- typedef void(^QueueProgressHandler)(NSProgress *progress);
- typedef void(^URLRequestCompletionHandler)(NSData *data, NSURLResponse *response, NSError *error);
- typedef void(^URLDownloadCompletionHandler)(NSURL *location, NSURLResponse *response, NSError *error);
- typedef void(^URLUploadCompletionHandler)(NSData *data, NSURLResponse *response, NSError *error);
- typedef void(^QueueCompletionHandler)(void);
- */
+
+let ConfigurationHandler         = {(request: NSMutableURLRequest)->() in }
+let ProgressHandler              = {(progress: Progress)->() in }
+let QueueProgressHandler         = {(progress: Progress)->() in }
+let URLRequestCompletionHandler  = {(data: NSData, response: URLResponse, error: Error)->() in }
+let URLDownloadCompletionHandler = {(location: URL, response: URLResponse, error: Error)->() in }
+let URLUploadCompletionHandler   = {(data: NSData, response: URLResponse, error: Error)->() in }
+let QueueCompletionHandler       = {()->() in }
+
 class HTNetworkConfiguration: NSObject
 {
     /**
@@ -62,12 +62,10 @@ class HTNetworkConfiguration: NSObject
         {
             let request = NSMutableURLRequest(url: url as URL)
             request.httpMethod = "POST";
-            
             /**
-             * 安全接口认证，防刷机制相关,可自行添加，
-             * 主要设置：request.setValue("xxx", forHTTPHeaderField: "xxx")
+             * 安全接口认证，主要设置：request.httpBody，可自行添加
+             * 防刷机制相关，主要设置：request.setValue("xxx", forHTTPHeaderField: "xxx")，可自行添加
              */
-            
             return request
         }
         return NSMutableURLRequest(url: URL(string: "")!)
