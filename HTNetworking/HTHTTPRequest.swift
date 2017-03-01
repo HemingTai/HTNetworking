@@ -8,52 +8,44 @@
 
 import Foundation
 
-class HTHTTPRequest
+class HTHTTPRequest: NSObject
 {
-    func dataTaskWithURL(baseUrl: URL, parameters: String, httpMethod: HTTPMethod, configuration:@escaping(ConfigurationHandler), completionHandler: URLRequestCompletionHandler) -> URLSessionDataTask
+    func dataTask(withURL baseUrl: URL, parameters: String, httpMethod: HTTPMethod, configurationHandler: HTConfigurationHandler?, completionHandler: HTURLRequestCompletionHandler?) -> URLSessionDataTask?
     {
-        if baseUrl.absoluteString.lengthOfBytes(using: <#T##String.Encoding#>)
+        if !baseUrl.absoluteString.isEmpty
         {
-            
+            completionHandler(nil, nil, nil)
+            return nil
+        }
+        switch httpMethod
+        {
+            case .HTTPMethodGET:
+                var url = baseUrl
+                if !parameters.isEmpty
+                {
+                    /*
+                     let baseUrl = URL(string: "http://example.com/v1/")//http://example.com/v1/
+                     URL(string: "foo", relativeTo: baseUrl)         //http://example.com/v1/foo
+                     URL(string: "foo?bar=baz", relativeTo: baseUrl) //http://example.com/v1/foo?bar=baz
+                     URL(string: "/foo", relativeTo: baseUrl)        //http://example.com/foo
+                     URL(string: "foo/", relativeTo: baseUrl)        //http://example.com/v1/foo
+                     URL(string: "/foo/", relativeTo: baseUrl)       //http://example.com/v1/foo/
+                     URL(string: "http://example2.com/", relativeTo: baseUrl)//http://example2.com/
+                     */
+                    url = URL(string: parameters, relativeTo: baseUrl)!
+                }
+                let request = NSMutableURLRequest(url: url)
+                if configurationHandler != nil
+                {
+                    configurationHandler!(request)
+                }
+                let dataTask = URLSession.shared.dataTask(with: request, completionHandler: completionHandler)
+                dataTask.resume
+                return dataTask
+        default:
+            return nil
         }
     }
-    
-    + (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)baseURL
-    parameters:(NSString *)parameters
-    httpMethod:(HTTPMethod)method
-    configuration:(ConfigurationHandler)configurationHandler
-    completionHandler:(URLRequestCompletionHandler)completionHandler
-    {
-    if (!baseURL) {
-    completionHandler(nil, nil, nil);
-    return nil;
-    }
-    switch (method) {
-    case HTTPMethodGET: {
-    /*
-     URL *baseURL = [URL URLWithString:@"http://example.com/v1/"];
-     [NSURL URLWithString:@"foo" relativeToURL:baseURL];  // http://example.com/v1/foo
-     [NSURL URLWithString:@"foo?bar=baz" relativeToURL:baseURL];  //
-     http://example.com/v1/foo?bar=baz
-     [NSURL URLWithString:@"/foo" relativeToURL:baseURL];  // http://example.com/foo
-     [NSURL URLWithString:@"foo/" relativeToURL:baseURL];  // http://example.com/v1/foo
-     [NSURL URLWithString:@"/foo/" relativeToURL:baseURL];  // http://example.com/foo/
-     [NSURL URLWithString:@"http://example2.com/" relativeToURL:baseURL]; //
-     http://example2.com/
-     */
-    NSURL *url = baseURL;
-    if ([Utility isValidString:parameters]) {
-    url = [NSURL URLWithString:parameters relativeToURL:baseURL];
-    }
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    if (configurationHandler) {
-    configurationHandler (request);
-    }
-    NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request
-    completionHandler:completionHandler];
-    [dataTask resume];
-    return dataTask;
-    } break;
     
     case HTTPMethodPOST: {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:baseURL];

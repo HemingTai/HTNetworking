@@ -14,13 +14,13 @@ enum HTTPMethod
     case HTTPMethodPOST
 }
 
-let ConfigurationHandler         = {(request: NSMutableURLRequest)->() in }
-let ProgressHandler              = {(progress: Progress)->() in }
-let QueueProgressHandler         = {(progress: Progress)->() in }
-let URLRequestCompletionHandler  = {(data: NSData, response: URLResponse, error: Error)->() in }
-let URLDownloadCompletionHandler = {(location: URL, response: URLResponse, error: Error)->() in }
-let URLUploadCompletionHandler   = {(data: NSData, response: URLResponse, error: Error)->() in }
-let QueueCompletionHandler       = {()->() in }
+typealias HTConfigurationHandler         = (_ request: NSMutableURLRequest)->()
+typealias HTProgressHandler              = (_ progress: Progress)->()
+typealias HTQueueProgressHandler         = (_ progress: Progress)->()
+typealias HTURLRequestCompletionHandler  = (_ data: NSData?, _ response: URLResponse?, _ error: Error?)->()
+typealias HTURLDownloadCompletionHandler = (_ location: URL?, _ response: URLResponse?, _ error: Error?)->()
+typealias HTURLUploadCompletionHandler   = (_ data: NSData?, _ response: URLResponse?, _ error: Error?)->()
+typealias HTQueueCompletionHandler       = ()->()
 
 class HTNetworkConfiguration: NSObject
 {
