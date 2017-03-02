@@ -15,6 +15,7 @@
 		760CACAA1E5E737200C102DE /* HTNetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760CACA91E5E737200C102DE /* HTNetworkConfiguration.swift */; };
 		760CAE311E6029FB00C102DE /* HTHTTPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760CAE301E6029FB00C102DE /* HTHTTPRequest.swift */; };
 		76B66C891E67E9DF005A1935 /* HTHTTPRequestQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B66C881E67E9DF005A1935 /* HTHTTPRequestQueue.swift */; };
+		76E4185D1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4185C1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		760CACA91E5E737200C102DE /* HTNetworkConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTNetworkConfiguration.swift; sourceTree = "<group>"; };
 		760CAE301E6029FB00C102DE /* HTHTTPRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTHTTPRequest.swift; sourceTree = "<group>"; };
 		76B66C881E67E9DF005A1935 /* HTHTTPRequestQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTHTTPRequestQueue.swift; sourceTree = "<group>"; };
+		76E4185C1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTHTTPDownloadQueue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				760CACA91E5E737200C102DE /* HTNetworkConfiguration.swift */,
 				760CAE301E6029FB00C102DE /* HTHTTPRequest.swift */,
 				76B66C881E67E9DF005A1935 /* HTHTTPRequestQueue.swift */,
+				76E4185C1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift */,
 			);
 			path = HTNetworking;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 				760CAC971E5E72B000C102DE /* AppDelegate.swift in Sources */,
 				76B66C891E67E9DF005A1935 /* HTHTTPRequestQueue.swift in Sources */,
 				760CAE311E6029FB00C102DE /* HTHTTPRequest.swift in Sources */,
+				76E4185D1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
