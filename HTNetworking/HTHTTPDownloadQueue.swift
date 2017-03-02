@@ -14,7 +14,7 @@
  ************************************************/
 import Foundation
 
-class HTHTTPDownloadQueue: NSObject
+class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadDelegate
 {
     //队列进度
     var queueProgress: Progress?
@@ -62,12 +62,13 @@ class HTHTTPDownloadQueue: NSObject
      @param progressHandler 队列进度回调
      @param completionHandler 队列完成回调
      */
-    init(URLSessionConfiguration configuration: URLSessionConfiguration,
+    init(URLSessionConfiguration configuration: URLSessionConfiguration?,
          queueProgressHandler: HTQueueProgressHandler?, queueCompletionHandler: HTQueueCompletionHandler?)
     {
-    if (!configuration) {
-    configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    }
+        if configuration == nil
+        {
+            configuration = URLSessionConfiguration.default
+        }
     if (self = [super init]) {
     // 添加线程锁
     _myLock = [[NSLock alloc] init];
@@ -133,7 +134,6 @@ class HTHTTPDownloadQueue: NSObject
      添加下载任务
      @param urlString 下载地址
      @param completionHandler 任务完成回调
-     @see addTaskWithURLString:progressHandler:completionHandler:
      */
     func addTask(withURLString urlString:String, completionHandler: HTURLDownloadCompletionHandler?)
     {
@@ -141,156 +141,167 @@ class HTHTTPDownloadQueue: NSObject
     }
     
     //! 获取单个任务的进度
-    func getTaskProgress(withURLString urlString: String) -> Progress
+    func getTaskProgress(withURLString urlString: String) -> Progress?
     {
-        if (![Utility isValidString:urlString]) {
-            return nil;
+        if !urlString.isEmpty
+        {
+            return nil
         }
-        NSString *key = @(urlString.hash).stringValue;
-        [_myLock lock];
-        NSURLSessionTask *task = self.tasks[key][@"Task"];
-        [_myLock unlock];
-        NSProgress *progress = [NSProgress progressWithTotalUnitCount:task.countOfBytesExpectedToReceive];
-        progress.completedUnitCount = task.countOfBytesReceived;
-        return progress;
+        let key = String(urlString.hashValue)
+        myLock?.lock()
+        let task = ((self.tasks?[key] as! NSDictionary)["Task"]) as! URLSessionTask
+        myLock?.unlock()
+        let progress = Progress.init(totalUnitCount: task.countOfBytesExpectedToReceive)
+        progress.completedUnitCount = task.countOfBytesReceived
+        return progress
     }
-
     //! 重设单个任务的进度回调
     func resetTaskProgressHandler(withURLString urlString: String, progressHandler: HTProgressHandler?)
     {
-        if (![Utility isValidString:urlString]) {
+        if !urlString.isEmpty
+        {
             return;
         }
-        NSString *key = @(urlString.hash).stringValue;
-        [_myLock lock];
-        NSMutableDictionary *taskInfo = [self.tasks[key] mutableCopy];
-        if (progressHandler) {
-            taskInfo[@"ProgressHandler"] = progressHandler;
-        } else {
-            [taskInfo removeObjectForKey:@"ProgressHandler"];
+        let key = String(urlString.hashValue)
+        myLock?.lock()
+        let taskInfo = (self.tasks?[key] as! NSDictionary).mutableCopy()
+        if progressHandler != nil
+        {
+            (taskInfo as! NSMutableDictionary)["ProgressHandler"] = progressHandler
         }
-        self.tasks[key] = taskInfo;
-        [_myLock unlock];
+        else
+        {
+            (taskInfo as! NSMutableDictionary).removeObject(forKey: "ProgressHandler")
+        }
+        self.tasks?[key] = taskInfo
+        myLock?.unlock()
     }
-    
     //! 取消单个任务
     func cancelTask(withURLString urlString: String)
     {
-        if (![Utility isValidString:urlString]) {
-            return;
+        if !urlString.isEmpty
+        {
+            return
         }
-        NSString *key = @(urlString.hash).stringValue;
-        [_myLock lock];
-        NSURLSessionTask *task = self.tasks[key][@"Task"];
-        [task cancel];
-        [_myLock unlock];
+        myLock?.lock()
+        let key = String(urlString.hashValue)
+        let task = (self.tasks?[key] as! NSDictionary)["Task"] as! URLSessionTask
+        task.cancel()
+        myLock?.unlock()
     }
     //! 继续单个任务
     func resumeTask(withURLString urlString: String)
     {
-        if (![Utility isValidString:urlString]) {
-            return;
+        if !urlString.isEmpty
+        {
+            return
         }
-        [_myLock lock];
-        NSString *key = @(urlString.hash).stringValue;
-        NSURLSessionTask *task = self.tasks[key][@"Task"];
-        [task resume];
-        [_myLock unlock];
+        myLock?.lock()
+        let key = String(urlString.hashValue)
+        let task = (self.tasks?[key] as! NSDictionary)["Task"] as! URLSessionTask
+        task.resume()
+        myLock?.unlock()
     }
     //! 挂起单个任务
     func suspendTask(withURLString urlString: String)
     {
-        if (![Utility isValidString:urlString]) {
-            return;
+        if !urlString.isEmpty
+        {
+            return
         }
-        [_myLock lock];
-        NSString *key = @(urlString.hash).stringValue;
-        NSURLSessionTask *task = self.tasks[key][@"Task"];
-        [task suspend];
-        [_myLock unlock];
+        myLock?.lock()
+        let key = String(urlString.hashValue)
+        let task = (self.tasks?[key] as! NSDictionary)["Task"] as! URLSessionTask
+        task.suspend()
+        myLock?.unlock()
     }
     //! 清空队列
     func clear()
     {
-        [_myLock lock];
-        [self.tasks enumerateKeysAndObjectsUsingBlock:^(id key, NSDictionary *obj, BOOL *stop) {
-            [obj[@"Task"] cancel];
-            }];
-        [self.operationQueue cancelAllOperations];
-        [self.tasks removeAllObjects];
-        [_myLock unlock];
-        self.queueProgress.completedUnitCount = 0;
-        self.queueProgress.totalUnitCount = 0;
-        if (self.queueCompletionHandler) {
-            self.queueCompletionHandler();
+        myLock?.lock()
+        tasks?.enumerateKeysAndObjects({ (id: Any, obj: Any, stop: UnsafeMutablePointer<ObjCBool>) in
+            ((obj as! NSDictionary)["task"] as! URLSessionTask).cancel()
+        })
+        operationQueue?.cancelAllOperations()
+        tasks?.removeAllObjects()
+        myLock?.unlock()
+        queueProgress?.completedUnitCount = 0
+        queueProgress?.totalUnitCount = 0
+        if queueCompletionHandler != nil
+        {
+            queueCompletionHandler!()
         }
     }
     //! 销毁队列，不能再添加任务
     func tearDown()
     {
-        [self clear];
-        [self.session invalidateAndCancel];
+        self.clear()
+        self.session?.invalidateAndCancel()
     }
     
-    #pragma mark - NSURLSessionDelegate
-    - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+    //MARK - URLSessionTaskDelegate
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)
     {
-    // didFinishDownloadingToURL已经回调完成了，所以此处无需处理完成，只要处理出错就可以了
-    if (error) {
-    NSString *key = @(task.originalRequest.URL.absoluteString.hash).stringValue;
-    [_myLock lock];
-    NSDictionary *taskInfo = self.tasks[key];
-    [_myLock unlock];
-    if (taskInfo) {
-    URLDownloadCompletionHandler handler = taskInfo[@"CompletionHandler"];
-    if (handler) {
-    handler(nil, task.response, error);
-    }
-    }
-    }
+        //didFinishDownloadingToURL已经回调完成了，所以此处无需处理完成，只要处理出错就可以了
+        if error != nil
+        {
+            let key = String(describing: task.originalRequest?.url?.absoluteString.hashValue)
+            myLock?.lock()
+            let taskInfo = self.tasks?[key] as! NSDictionary
+            myLock?.unlock()
+            if taskInfo.count != 0
+            {
+                let handler = taskInfo["CompletionHandler"] as! HTURLDownloadCompletionHandler?
+                if handler != nil
+                {
+                    handler!(nil, task.response, error)
+                }
+            }
+        }
     }
     
-    #pragma mark - NSURLSessionDownloadDelegate
-    - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
+    //MARK - NSURLSessionDownloadDelegate
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL)
     {
-    NSString *key = @(downloadTask.originalRequest.URL.absoluteString.hash).stringValue;
-    [_myLock lock];
-    NSDictionary *taskInfo = self.tasks[key];
-    [_myLock unlock];
-    if (taskInfo) {
-    URLDownloadCompletionHandler handler = taskInfo[@"CompletionHandler"];
-    if (handler) {
-    handler(location, downloadTask.response, downloadTask.error);
+        let key = String(describing: downloadTask.originalRequest?.url?.absoluteString.hashValue)
+        myLock?.lock()
+        let taskInfo = self.tasks?[key] as! NSDictionary?
+        myLock?.unlock()
+        if taskInfo != nil
+        {
+            let handler = taskInfo?["CompletionHandler"] as! HTURLDownloadCompletionHandler?
+            if handler != nil
+            {
+                handler!(location, downloadTask.response, downloadTask.error)
+            }
+            //更新队列进度
+            if !(queueProgress?.isCancelled)!
+            {
+                queueProgress?.completedUnitCount += 1
+            }
+            //队列完成
+            if queueCompletionHandler != nil && queueProgress?.fractionCompleted == 1.0
+            {
+                queueCompletionHandler?()
+            }
+        }
     }
     
-    // update progress
-    if (!self.queueProgress.isCancelled) {
-    self.queueProgress.completedUnitCount++;
-    }
-    if (self.queueProgressHandler) {
-    self.queueProgressHandler(self.queueProgress);
-    }
-    
-    // queue has completed
-    if (self.queueCompletionHandler && self.queueProgress.fractionCompleted == 1.0) {
-    self.queueCompletionHandler();
-    }
-    }
-    }
-    
-    - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)
     {
-    NSString *key = @(downloadTask.originalRequest.URL.absoluteString.hash).stringValue;
-    [_myLock lock];
-    NSDictionary *taskInfo = self.tasks[key];
-    [_myLock unlock];
-    if (taskInfo) {
-    ProgressHandler handler = taskInfo[@"ProgressHandler"];
-    if (handler) {
-    NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalBytesExpectedToWrite];
-    progress.completedUnitCount = totalBytesWritten;
-    handler(progress);
-    }
-    }
+        let key = String(describing: downloadTask.originalRequest?.url?.absoluteString.hashValue)
+        myLock?.lock()
+        let taskInfo = self.tasks?[key] as! NSDictionary?
+        myLock?.unlock()
+        if taskInfo != nil
+        {
+            let handler = taskInfo?["ProgressHandler"] as! HTProgressHandler?
+            if handler != nil
+            {
+                let progress = Progress.init(totalUnitCount: totalBytesExpectedToWrite)
+                progress.completedUnitCount = totalBytesWritten
+                handler!(progress)
+            }
+        }
     }
 }
