@@ -10,11 +10,20 @@ import Foundation
 
 class HTHTTPRequest: NSObject
 {
+    /**
+     添加请求
+     @param baseURL 请求URL
+     @param parameters 请求参数
+     @param httpMethod 请求方法
+     @param configurationHandler 额外配置回调
+     @param completionHandler 完成回调
+     @return NSURLSessionDataTask
+     */
     func dataTask(withURL baseUrl: URL, parameters: String, httpMethod: HTTPMethod, configurationHandler: HTConfigurationHandler?, completionHandler: HTURLRequestCompletionHandler?) -> URLSessionDataTask?
     {
         if !baseUrl.absoluteString.isEmpty
         {
-            completionHandler(nil, nil, nil)
+            completionHandler!(nil, nil, nil)
             return nil
         }
         switch httpMethod
@@ -34,118 +43,137 @@ class HTHTTPRequest: NSObject
                      */
                     url = URL(string: parameters, relativeTo: baseUrl)!
                 }
-                let request = NSMutableURLRequest(url: url)
+                let request = URLRequest(url: url)
                 if configurationHandler != nil
                 {
                     configurationHandler!(request)
                 }
-                let dataTask = URLSession.shared.dataTask(with: request, completionHandler: completionHandler)
-                dataTask.resume
+                let session = URLSession.shared
+                let dataTask = session.dataTask(with: request, completionHandler:
+                    completionHandler!)
+                dataTask.resume()
                 return dataTask
-        default:
-            return nil
+            case .HTTPMethodPOST:
+                var request = URLRequest(url: baseUrl)
+                request.httpMethod = "POST"
+                if !parameters.isEmpty
+                {
+                    request.httpBody = parameters.data(using: String.Encoding.utf8)
+                }
+                if configurationHandler != nil
+                {
+                    configurationHandler!(request)
+                }
+                let dataTask = URLSession.shared.dataTask(with: request, completionHandler: completionHandler!)
+                dataTask.resume()
+                return dataTask
+            default:
+                let error = NSError.init(domain: "wwww.baidu", code: 0, userInfo: [NSLocalizedDescriptionKey:"HTTP Method 不支持"])
+                completionHandler!(nil, nil, error)
+                return nil
         }
     }
     
-    case HTTPMethodPOST: {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:baseURL];
-    request.HTTPMethod = @"POST";
-    
-    if (parameters) {
-    request.HTTPBody = [parameters dataUsingEncoding:NSUTF8StringEncoding];
-    }
-    
-    if (configurationHandler) {
-    configurationHandler (request);
-    }
-    
-    NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request
-    completionHandler:completionHandler];
-    [dataTask resume];
-    return dataTask;
-    } break;
-    
-    default: {
-    NSError *error = [NSError errorWithDomain:@"com.jsmcc"
-    code:0
-    userInfo:@{
-    NSLocalizedDescriptionKey: @"HTTP Method 不支持"
-    }];
-    completionHandler (nil, nil, error);
-    return nil;
-    } break;
-    }
-    
-    return nil;
-    }
-    
-    + (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)baseURL
-    parameters:(NSString *)parameters
-    httpMethod:(HTTPMethod)method
-    completionHandler:(URLRequestCompletionHandler)completionHandler
+    /**
+     添加请求
+     @param baseURL 请求URL
+     @param parameters 请求参数
+     @param httpMethod 请求方法
+     @param completionHandler 完成回调
+     @return NSURLSessionDataTask
+     */
+    func dataTask(withURL baseUrl: URL, parameters: String, httpMethod: HTTPMethod, completionHandler: HTURLRequestCompletionHandler?) -> URLSessionDataTask?
     {
-    return [self dataTaskWithURL:baseURL
-    parameters:parameters
-    httpMethod:method
-    configuration:nil
-    completionHandler:completionHandler];
+        return self.dataTask(withURL: baseUrl, parameters: parameters, httpMethod: httpMethod, configurationHandler: nil, completionHandler: completionHandler)
     }
     
-    + (NSURLSessionDataTask *)postToBaseURLWithURL:(NSURL *)url
-    parameters:(NSString *)parameters
-    configuration:(ConfigurationHandler)configurationHandler
-    completionHandler:(URLRequestCompletionHandler)completionHandler
+    /**
+     添加POST请求到服务器指定地址
+     @param url 指定地址
+     @param parameters 参数
+     @param configurationHandler 额外配置回调
+     @param completionHandler 完成回调
+     @return NSURLSessionDataTask
+     */
+    func postToBaseURL(withURL url: URL, parameters: String, configurationHandler: HTConfigurationHandler?, completionHandler: HTURLRequestCompletionHandler?) -> URLSessionDataTask?
     {
-    NSMutableURLRequest *request =
-    [HttpConfiguration getConfiguredPostRequestWithURL:url parameters:parameters];
-    if (!request) {
-    completionHandler(nil, nil, nil);
-    return nil;
-    }
-    if (configurationHandler) {
-    configurationHandler (request);
-    }
-    NSURLSessionConfiguration *configuration = [HttpConfiguration getSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
-    NSURLSessionDataTask *dataTask =
-    [session dataTaskWithRequest:request completionHandler:completionHandler];
-    [dataTask resume];
-    return dataTask;
+        let request = HTNetworkConfiguration.getConfiguredPostRequest(url: url, parameters: parameters)
+        if request != nil
+        {
+            completionHandler!(nil, nil, nil);
+            return nil
+        }
+        if configurationHandler != nil
+        {
+            configurationHandler!(request!)
+        }
+        let configuration = HTNetworkConfiguration.getSessionConfiguration()
+        let session = URLSession(configuration: configuration)
+        let dataTask = session.dataTask(with: request!, completionHandler: completionHandler!)
+        dataTask.resume()
+        return dataTask;
     }
     
-    + (NSURLSessionDataTask *)postToBaseURLWithParameters:(NSString *)parameters
-    configuration:(ConfigurationHandler)configurationHandler
-    completionHandler:(URLRequestCompletionHandler)completionHandler
+    /**
+     添加POST请求到服务器
+     @param parameters 请求参数
+     @param configurationHandler 额外配置回调
+     @param completionHandler 完成回调
+     @return NSURLSessionDataTask
+     */
+    func postToBaseURL(withParameters parameters: String, configurationHandler: HTConfigurationHandler?, completionHandler: HTURLRequestCompletionHandler?) -> URLSessionDataTask?
     {
-    NSURL *url = [HttpConfiguration getBaseURL];
-    if (!url) {
-    completionHandler(nil, nil, nil);
-    return nil;
-    }
-    NSMutableURLRequest *request =
-    [HttpConfiguration getConfiguredPostRequestWithURL:url parameters:parameters];
-    if (configurationHandler) {
-    configurationHandler (request);
-    }
-    NSURLSessionConfiguration *configuration = [HttpConfiguration getSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
-    NSURLSessionDataTask *dataTask =
-    [session dataTaskWithRequest:request completionHandler:completionHandler];
-    [dataTask resume];
-    return dataTask;
+        let url = HTNetworkConfiguration.getDefaultURL()
+        if !url.absoluteString.isEmpty
+        {
+            completionHandler!(nil, nil, nil)
+            return nil
+        }
+        let request = HTNetworkConfiguration.getConfiguredPostRequest(url: url, parameters: parameters)
+        if configurationHandler != nil
+        {
+            configurationHandler!(request!)
+        }
+        let configuration = HTNetworkConfiguration.getSessionConfiguration()
+        let session = URLSession(configuration: configuration)
+        let dataTask = session.dataTask(with: request!, completionHandler: completionHandler!)
+        dataTask.resume()
+        return dataTask;
     }
     
-    + (NSURLSessionDataTask *)postToBaseURLWithParameters:(NSString *)parameters
-    completionHandler:(URLRequestCompletionHandler)completionHandler
+    /**
+     添加POST请求到服务器
+     @param parameters 请求参数
+     @param completionHandler 完成回调
+     @return NSURLSessionDataTask
+     @see postToBaseURL(WithParameters:configuration:completionHandler:)
+     */
+    func postToBaseURL(withParameters parameters: String, completionHandler: HTURLRequestCompletionHandler?) -> URLSessionDataTask?
     {
-    return [self postToBaseURLWithParameters:parameters
-    configuration:nil
-    completionHandler:completionHandler];
+        return self.postToBaseURL(withParameters: parameters, configurationHandler: nil, completionHandler: completionHandler)
     }
     
-    + (void)cancel:(NSURLSessionTask *)task { [task cancel]; }
+    /**
+     * 任务开始
+     */
+    func resume(task: URLSessionTask)
+    {
+        task.resume()
+    }
     
-    + (void)resume:(NSURLSessionTask *)task { [task resume]; }
+    /**
+     * 任务取消
+     */
+    func cancel(task: URLSessionTask)
+    {
+        task.cancel()
+    }
     
-    + (void)suspend:(NSURLSessionTask *)task { [task suspend]; }
+    /**
+     * 任务挂起
+     */
+    func suspend(task: URLSessionTask)
+    {
+        task.suspend()
+    }
 }

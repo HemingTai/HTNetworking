@@ -14,13 +14,13 @@ enum HTTPMethod
     case HTTPMethodPOST
 }
 
-typealias HTConfigurationHandler         = (_ request: NSMutableURLRequest)->()
-typealias HTProgressHandler              = (_ progress: Progress)->()
-typealias HTQueueProgressHandler         = (_ progress: Progress)->()
-typealias HTURLRequestCompletionHandler  = (_ data: NSData?, _ response: URLResponse?, _ error: Error?)->()
-typealias HTURLDownloadCompletionHandler = (_ location: URL?, _ response: URLResponse?, _ error: Error?)->()
-typealias HTURLUploadCompletionHandler   = (_ data: NSData?, _ response: URLResponse?, _ error: Error?)->()
-typealias HTQueueCompletionHandler       = ()->()
+typealias HTConfigurationHandler         = (_ request: URLRequest)->Void
+typealias HTProgressHandler              = (_ progress: Progress)->Void
+typealias HTQueueProgressHandler         = (_ progress: Progress)->Void
+typealias HTURLRequestCompletionHandler  = (_ data: Data?, _ response: URLResponse?, _ error: Error?)->Void
+typealias HTURLDownloadCompletionHandler = (_ location: URL?, _ response: URLResponse?, _ error: Error?)->Void
+typealias HTURLUploadCompletionHandler   = (_ data: Data?, _ response: URLResponse?, _ error: Error?)->Void
+typealias HTQueueCompletionHandler       = ()->Void
 
 class HTNetworkConfiguration: NSObject
 {
@@ -28,20 +28,20 @@ class HTNetworkConfiguration: NSObject
      * 获取默认的请求服务端的地址
      * - Returns: 返回URL
      */
-    func getDefaultURL() -> NSURL
+    class func getDefaultURL() -> URL
     {
         let defaultURLString = "https://www.baidu.com/service/action.dox"
-        return NSURL(string: defaultURLString)!
+        return URL(string: defaultURLString)!
     }
     
     /**
      * 获取session配置
      * - Returns: 返回session配置
      */
-    func getSessionConfiguration() -> URLSessionConfiguration
+    class func getSessionConfiguration() -> URLSessionConfiguration
     {
         let configuration = URLSessionConfiguration.default
-        ///设置请求头
+        //设置请求头
         let httpHeader = NSMutableDictionary()
         httpHeader.setValue("application/x-www-form-urlencoded; charset=UTF-8", forKey: "Content-Type")
         httpHeader.setValue("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1", forKey: "User-Agent")
@@ -50,17 +50,25 @@ class HTNetworkConfiguration: NSObject
         return configuration
     }
     
-    func getConfiguredURLSession(delegate: URLSessionDelegate, delegateQueue:OperationQueue) -> URLSession
+    /**
+     * 获取默认URLSession，未配置HTTPHeader
+     * - Returns: 返回URLSession
+     */
+    class func getConfiguredURLSession(delegate: URLSessionDelegate, delegateQueue:OperationQueue) -> URLSession
     {
         let session = URLSession(configuration: self.getSessionConfiguration(), delegate: delegate, delegateQueue: delegateQueue)
         return session
     }
     
-    func getConfiguredPostRequest(url: NSURL, parameters: String) -> NSMutableURLRequest
+    /**
+     * 获取默认PostRequest，未添加安全接口认证和防刷机制
+     * - Returns: 返回URLRequest
+     */
+    class func getConfiguredPostRequest(url: URL, parameters: String) -> URLRequest?
     {
-        if url.absoluteString != nil
+        if !url.absoluteString.isEmpty
         {
-            let request = NSMutableURLRequest(url: url as URL)
+            var request = URLRequest(url: url)
             request.httpMethod = "POST";
             /**
              * 安全接口认证，主要设置：request.httpBody，可自行添加
@@ -68,6 +76,6 @@ class HTNetworkConfiguration: NSObject
              */
             return request
         }
-        return NSMutableURLRequest(url: URL(string: "")!)
+        return nil
     }
 }
