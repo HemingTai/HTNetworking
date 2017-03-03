@@ -8,18 +8,21 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
+class ViewController: UIViewController
+{
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+//        if !(data?.isEmpty)!
+//        {
+//            let dic = try JSONSerialization.jsonObject(with: data!, options: .mutableLeaves)
+//            print(dic)
+//        }https://api.weibo.com/2/statuses/public_timeline.json
     }
 
-    override func didReceiveMemoryWarning() {
+    override func didReceiveMemoryWarning()
+    {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
-
 }
 

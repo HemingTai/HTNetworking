@@ -6,6 +6,11 @@
 //  Copyright © 2017年 Mr.Tai. All rights reserved.
 //
 
+/**************************
+ * 支持默认请求
+ * 支持请求设置了请求头的服务端
+ **************************/
+
 import Foundation
 
 class HTHTTPRequest: NSObject
@@ -67,10 +72,6 @@ class HTHTTPRequest: NSObject
                 let dataTask = URLSession.shared.dataTask(with: request, completionHandler: completionHandler!)
                 dataTask.resume()
                 return dataTask
-            default:
-                let error = NSError.init(domain: "wwww.baidu", code: 0, userInfo: [NSLocalizedDescriptionKey:"HTTP Method 不支持"])
-                completionHandler!(nil, nil, error)
-                return nil
         }
     }
     
@@ -146,7 +147,6 @@ class HTHTTPRequest: NSObject
      @param parameters 请求参数
      @param completionHandler 完成回调
      @return NSURLSessionDataTask
-     @see postToBaseURL(WithParameters:configuration:completionHandler:)
      */
     func postToBaseURL(withParameters parameters: String, completionHandler: HTURLRequestCompletionHandler?) -> URLSessionDataTask?
     {
@@ -175,5 +175,15 @@ class HTHTTPRequest: NSObject
     func suspend(task: URLSessionTask)
     {
         task.suspend()
+    }
+    
+    func addTask(withURL baseUrl: URL, completionHandler: HTURLRequestCompletionHandler?)
+    {
+        let url = baseUrl
+        let request = URLRequest(url: url)
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request, completionHandler:
+            completionHandler!)
+        dataTask.resume()
     }
 }

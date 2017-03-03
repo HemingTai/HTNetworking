@@ -25,12 +25,12 @@ typealias HTQueueCompletionHandler       = ()->Void
 class HTNetworkConfiguration: NSObject
 {
     /**
-     * 获取默认的请求服务端的地址
+     * 获取默认的请求地址（填写对应的服务端地址）
      * - Returns: 返回URL
      */
     class func getDefaultURL() -> URL
     {
-        let defaultURLString = "https://www.baidu.com/service/action.dox"
+        let defaultURLString = "https://api.weibo.com/2/statuses/public_timeline.json"
         return URL(string: defaultURLString)!
     }
     
