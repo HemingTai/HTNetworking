@@ -26,7 +26,7 @@ class HTHTTPRequest: NSObject
      */
     func dataTask(withURL baseUrl: URL, parameters: String, httpMethod: HTTPMethod, configurationHandler: HTConfigurationHandler?, completionHandler: HTURLRequestCompletionHandler?) -> URLSessionDataTask?
     {
-        if !baseUrl.absoluteString.isEmpty
+        if baseUrl.absoluteString.isEmpty
         {
             completionHandler!(nil, nil, nil)
             return nil
@@ -49,10 +49,8 @@ class HTHTTPRequest: NSObject
                     url = URL(string: parameters, relativeTo: baseUrl)!
                 }
                 let request = URLRequest(url: url)
-                if configurationHandler != nil
-                {
-                    configurationHandler!(request)
-                }
+                guard configurationHandler != nil else { return nil }
+                configurationHandler!(request)
                 let session = URLSession.shared
                 let dataTask = session.dataTask(with: request, completionHandler:
                     completionHandler!)
@@ -65,10 +63,8 @@ class HTHTTPRequest: NSObject
                 {
                     request.httpBody = parameters.data(using: String.Encoding.utf8)
                 }
-                if configurationHandler != nil
-                {
-                    configurationHandler!(request)
-                }
+                guard configurationHandler != nil else { return nil }
+                configurationHandler!(request)
                 let dataTask = URLSession.shared.dataTask(with: request, completionHandler: completionHandler!)
                 dataTask.resume()
                 return dataTask
@@ -99,15 +95,13 @@ class HTHTTPRequest: NSObject
     func postToBaseURL(withURL url: URL, parameters: String, configurationHandler: HTConfigurationHandler?, completionHandler: HTURLRequestCompletionHandler?) -> URLSessionDataTask?
     {
         let request = HTNetworkConfiguration.getConfiguredPostRequest(url: url, parameters: parameters)
-        if request != nil
+        guard request != nil else
         {
-            completionHandler!(nil, nil, nil);
+            completionHandler!(nil, nil, nil)
             return nil
         }
-        if configurationHandler != nil
-        {
-            configurationHandler!(request!)
-        }
+        guard configurationHandler != nil else { return nil }
+        configurationHandler!(request!)
         let configuration = HTNetworkConfiguration.getSessionConfiguration()
         let session = URLSession(configuration: configuration)
         let dataTask = session.dataTask(with: request!, completionHandler: completionHandler!)
@@ -131,10 +125,8 @@ class HTHTTPRequest: NSObject
             return nil
         }
         let request = HTNetworkConfiguration.getConfiguredPostRequest(url: url, parameters: parameters)
-        if configurationHandler != nil
-        {
-            configurationHandler!(request!)
-        }
+        guard configurationHandler != nil else { return nil }
+        configurationHandler!(request!)
         let configuration = HTNetworkConfiguration.getSessionConfiguration()
         let session = URLSession(configuration: configuration)
         let dataTask = session.dataTask(with: request!, completionHandler: completionHandler!)
@@ -177,13 +169,13 @@ class HTHTTPRequest: NSObject
         task.suspend()
     }
     
-    func addTask(withURL baseUrl: URL, completionHandler: HTURLRequestCompletionHandler?)
+    func addTask(withURL baseUrl: URL, completionHandler: @escaping HTURLRequestCompletionHandler)
     {
         let url = baseUrl
         let request = URLRequest(url: url)
         let session = URLSession.shared
         let dataTask = session.dataTask(with: request, completionHandler:
-            completionHandler!)
+            completionHandler)
         dataTask.resume()
     }
 }

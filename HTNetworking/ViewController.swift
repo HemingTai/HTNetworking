@@ -13,13 +13,19 @@ class ViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-//        if !(data?.isEmpty)!
-//        {
-//            let dic = try JSONSerialization.jsonObject(with: data!, options: .mutableLeaves)
-//            print(dic)
-//        }https://api.weibo.com/2/statuses/public_timeline.json
-    }
 
+        let url = URL(string: "https://api.douban.com/v2/book/1220562")
+        let httpRequest = HTHTTPRequest()
+        httpRequest.addTask(withURL: url!, completionHandler: { (data, response, error) in
+            guard data != nil else { return }
+            do
+            {
+                let dic = try JSONSerialization.jsonObject(with: data!, options: .mutableLeaves)
+                print("dic:\(dic)")
+            }catch{}
+        })
+    }
+    
     override func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()

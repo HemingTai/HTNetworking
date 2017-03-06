@@ -63,50 +63,39 @@ class HTHTTPRequestQueue: NSObject, URLSessionDelegate
         {
             case .HTTPMethodGET:
                 let url = URL(string: parameters, relativeTo: baseURL)
-                if (url?.absoluteString.isEmpty)!
+                guard url != nil else
                 {
-                    completionHandler(nil, nil, nil);
-                    return ;
+                    completionHandler(nil, nil, nil)
+                    return
                 }
                 //Get请求未配置安全认证和防刷机制
                 let request = URLRequest(url: url!)
-                if configurationHandler != nil
-                {
-                    configurationHandler!(request);
-                }
+                guard configurationHandler != nil else { return }
+                configurationHandler!(request)
                 let dataTask = session?.dataTask(with: request, completionHandler: { (data, response, error) in
-                    if !(self.queueProgress?.isCancelled)!
-                    {
-                        self.queueProgress?.completedUnitCount += 1
-                    }
+                    guard (self.queueProgress?.isCancelled)! else { return }
+                    self.queueProgress?.completedUnitCount += 1
                     //更新队列进度
-                    if self.queueProgressHandler != nil
-                    {
-                        self.queueProgressHandler!(self.queueProgress!)
-                    }
+                    guard self.queueProgressHandler != nil else { return }
+                    self.queueProgressHandler!(self.queueProgress!)
                     //队列完成
-                    if self.queueCompletionHandler != nil && self.queueProgress?.fractionCompleted == 1.0
-                    {
-                        self.queueCompletionHandler!()
-                    }
-                    if !(self.queueProgress?.isCancelled)!
-                    {
-                        self.queueProgress?.totalUnitCount += 1
-                    }
+                    guard self.queueCompletionHandler != nil && self.queueProgress?.fractionCompleted == 1.0 else { return }
+                    self.queueCompletionHandler!()
+                    guard (self.queueProgress?.isCancelled)! else { return }
+                    self.queueProgress?.totalUnitCount += 1
                 })
                 self.tasks?.setObject(dataTask! as URLSessionDataTask, forKey: String(parameters.hashValue) as NSCopying)
                 dataTask?.resume()
             case .HTTPMethodPOST:
                 let request = HTNetworkConfiguration.getConfiguredPostRequest(url: baseURL, parameters: parameters)
-                if request != nil
+                guard request != nil else
                 {
-                    completionHandler(nil, nil, nil);
-                    return ;
+                    completionHandler(nil, nil, nil)
+                    return
+
                 }
-                if configurationHandler != nil
-                {
-                    configurationHandler!(request!)
-                }
+                guard configurationHandler != nil else { return }
+                configurationHandler!(request!)
                 let dataTask = self.session?.dataTask(with: request!, completionHandler: { (data, response, error) in
                     if !(self.queueProgress?.isCancelled)!
                     {
