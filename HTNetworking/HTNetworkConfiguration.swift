@@ -30,7 +30,7 @@ class HTNetworkConfiguration: NSObject
      */
     class func getDefaultURL() -> URL
     {
-        let defaultURLString = "https://api.weibo.com/2/statuses/public_timeline.json"
+        let defaultURLString = "https://www.douban.com/service/auth2/token"
         return URL(string: defaultURLString)!
     }
     

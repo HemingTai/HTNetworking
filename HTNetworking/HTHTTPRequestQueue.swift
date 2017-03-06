@@ -97,29 +97,21 @@ class HTHTTPRequestQueue: NSObject, URLSessionDelegate
                 guard configurationHandler != nil else { return }
                 configurationHandler!(request!)
                 let dataTask = self.session?.dataTask(with: request!, completionHandler: { (data, response, error) in
-                    if !(self.queueProgress?.isCancelled)!
-                    {
-                        self.queueProgress?.completedUnitCount += 1
-                    }
+                    guard (self.queueProgress?.isCancelled)! else { return }
+                    self.queueProgress?.completedUnitCount += 1
                     //更新队列进度
-                    if self.queueProgressHandler != nil
-                    {
-                        self.queueProgressHandler!(self.queueProgress!)
-                    }
+                    guard self.queueProgressHandler != nil else { return }
+                    self.queueProgressHandler!(self.queueProgress!)
                     //队列完成
-                    if self.queueCompletionHandler != nil && self.queueProgress?.fractionCompleted == 1.0
-                    {
-                        self.queueCompletionHandler!()
-                    }
+                    guard self.queueCompletionHandler != nil && self.queueProgress?.fractionCompleted == 1.0 else { return }
+                    self.queueCompletionHandler!()
                 })
                 self.tasks?.setObject(dataTask! as URLSessionDataTask, forKey: String(parameters.hashValue) as NSCopying)
                 dataTask?.resume()
         }
         //更新队列进度
-        if self.queueProgressHandler != nil
-        {
-            self.queueProgressHandler!(self.queueProgress!);
-        }
+        guard self.queueProgressHandler != nil else { return }
+        self.queueProgressHandler!(self.queueProgress!)
     }
     
     /**
@@ -155,10 +147,8 @@ class HTHTTPRequestQueue: NSObject, URLSessionDelegate
         })
         queueProgress?.completedUnitCount = 0
         queueProgress?.totalUnitCount = 0
-        if queueCompletionHandler != nil
-        {
-            queueCompletionHandler!()
-        }
+        guard queueCompletionHandler != nil else { return }
+        queueCompletionHandler!()
     }
     
     /** 
