@@ -13,10 +13,10 @@
 		760CAC9E1E5E72B000C102DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 760CAC9D1E5E72B000C102DE /* Assets.xcassets */; };
 		760CACA11E5E72B000C102DE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 760CAC9F1E5E72B000C102DE /* LaunchScreen.storyboard */; };
 		760CACAA1E5E737200C102DE /* HTNetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760CACA91E5E737200C102DE /* HTNetworkConfiguration.swift */; };
-		760CAE311E6029FB00C102DE /* HTHTTPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760CAE301E6029FB00C102DE /* HTHTTPRequest.swift */; };
-		76844DF71E6908EC00515361 /* HTHTTPUploadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76844DF61E6908EC00515361 /* HTHTTPUploadQueue.swift */; };
-		76B66C891E67E9DF005A1935 /* HTHTTPRequestQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B66C881E67E9DF005A1935 /* HTHTTPRequestQueue.swift */; };
-		76E4185D1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4185C1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift */; };
+		760CAE311E6029FB00C102DE /* HTRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760CAE301E6029FB00C102DE /* HTRequest.swift */; };
+		76844DF71E6908EC00515361 /* HTUploadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76844DF61E6908EC00515361 /* HTUploadQueue.swift */; };
+		76B66C891E67E9DF005A1935 /* HTRequestQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B66C881E67E9DF005A1935 /* HTRequestQueue.swift */; };
+		76E4185D1E680FB3009FBDE8 /* HTDownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4185C1E680FB3009FBDE8 /* HTDownloadQueue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,10 +28,10 @@
 		760CACA01E5E72B000C102DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		760CACA21E5E72B000C102DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		760CACA91E5E737200C102DE /* HTNetworkConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTNetworkConfiguration.swift; sourceTree = "<group>"; };
-		760CAE301E6029FB00C102DE /* HTHTTPRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTHTTPRequest.swift; sourceTree = "<group>"; };
-		76844DF61E6908EC00515361 /* HTHTTPUploadQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTHTTPUploadQueue.swift; sourceTree = "<group>"; };
-		76B66C881E67E9DF005A1935 /* HTHTTPRequestQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTHTTPRequestQueue.swift; sourceTree = "<group>"; };
-		76E4185C1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTHTTPDownloadQueue.swift; sourceTree = "<group>"; };
+		760CAE301E6029FB00C102DE /* HTRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTRequest.swift; sourceTree = "<group>"; };
+		76844DF61E6908EC00515361 /* HTUploadQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTUploadQueue.swift; sourceTree = "<group>"; };
+		76B66C881E67E9DF005A1935 /* HTRequestQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTRequestQueue.swift; sourceTree = "<group>"; };
+		76E4185C1E680FB3009FBDE8 /* HTDownloadQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTDownloadQueue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,10 +71,10 @@
 				760CAC9F1E5E72B000C102DE /* LaunchScreen.storyboard */,
 				760CACA21E5E72B000C102DE /* Info.plist */,
 				760CACA91E5E737200C102DE /* HTNetworkConfiguration.swift */,
-				760CAE301E6029FB00C102DE /* HTHTTPRequest.swift */,
-				76B66C881E67E9DF005A1935 /* HTHTTPRequestQueue.swift */,
-				76E4185C1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift */,
-				76844DF61E6908EC00515361 /* HTHTTPUploadQueue.swift */,
+				760CAE301E6029FB00C102DE /* HTRequest.swift */,
+				76B66C881E67E9DF005A1935 /* HTRequestQueue.swift */,
+				76E4185C1E680FB3009FBDE8 /* HTDownloadQueue.swift */,
+				76844DF61E6908EC00515361 /* HTUploadQueue.swift */,
 			);
 			path = HTNetworking;
 			sourceTree = "<group>";
@@ -155,10 +155,10 @@
 				760CAC991E5E72B000C102DE /* ViewController.swift in Sources */,
 				760CACAA1E5E737200C102DE /* HTNetworkConfiguration.swift in Sources */,
 				760CAC971E5E72B000C102DE /* AppDelegate.swift in Sources */,
-				76844DF71E6908EC00515361 /* HTHTTPUploadQueue.swift in Sources */,
-				76B66C891E67E9DF005A1935 /* HTHTTPRequestQueue.swift in Sources */,
-				760CAE311E6029FB00C102DE /* HTHTTPRequest.swift in Sources */,
-				76E4185D1E680FB3009FBDE8 /* HTHTTPDownloadQueue.swift in Sources */,
+				76844DF71E6908EC00515361 /* HTUploadQueue.swift in Sources */,
+				76B66C891E67E9DF005A1935 /* HTRequestQueue.swift in Sources */,
+				760CAE311E6029FB00C102DE /* HTRequest.swift in Sources */,
+				76E4185D1E680FB3009FBDE8 /* HTDownloadQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

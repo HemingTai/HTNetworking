@@ -68,8 +68,10 @@ class HTNetworkConfiguration: NSObject
     {
         if !url.absoluteString.isEmpty
         {
+            let body = parameters.data(using: .utf8)
             var request = URLRequest(url: url)
-            request.httpMethod = "POST";
+            request.httpMethod = "POST"
+            request.httpBody = body
             /**
              * 安全接口认证，主要设置：request.httpBody，可自行添加
              * 防刷机制相关，主要设置：request.setValue("xxx", forHTTPHeaderField: "xxx")，可自行添加

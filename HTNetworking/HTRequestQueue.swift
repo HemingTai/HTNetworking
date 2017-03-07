@@ -1,5 +1,5 @@
 //
-//  HTHTTPRequestQueue.swift
+//  HTRequestQueue.swift
 //  HTNetworking
 //
 //  Created by heming on 17/3/2.
@@ -13,7 +13,7 @@
 
 import Foundation
 
-class HTHTTPRequestQueue: NSObject, URLSessionDelegate
+class HTRequestQueue: NSObject, URLSessionDelegate
 {
     //队列进度
     var queueProgress: Progress?
@@ -44,7 +44,7 @@ class HTHTTPRequestQueue: NSObject, URLSessionDelegate
      */
     init(progressHandler: @escaping HTQueueProgressHandler, completionHandler: @escaping HTQueueCompletionHandler)
     {
-        _ = HTHTTPRequestQueue()
+        _ = HTRequestQueue()
         queueProgressHandler = progressHandler
         queueCompletionHandler = completionHandler
     }
@@ -70,21 +70,35 @@ class HTHTTPRequestQueue: NSObject, URLSessionDelegate
                 }
                 //Get请求未配置安全认证和防刷机制
                 let request = URLRequest(url: url!)
-                guard configurationHandler != nil else { return }
-                configurationHandler!(request)
+                if configurationHandler != nil
+                {
+                    configurationHandler!(request)
+                }
                 let dataTask = session?.dataTask(with: request, completionHandler: { (data, response, error) in
-                    guard (self.queueProgress?.isCancelled)! else { return }
-                    self.queueProgress?.completedUnitCount += 1
+                    if !(self.queueProgress?.isCancelled)!
+                    {
+                         self.queueProgress?.completedUnitCount += 1
+                    }
                     //更新队列进度
-                    guard self.queueProgressHandler != nil else { return }
-                    self.queueProgressHandler!(self.queueProgress!)
+                    if self.queueProgressHandler != nil
+                    {
+                        self.queueProgressHandler!(self.queueProgress!)
+                    }
                     //队列完成
-                    guard self.queueCompletionHandler != nil && self.queueProgress?.fractionCompleted == 1.0 else { return }
-                    self.queueCompletionHandler!()
-                    guard (self.queueProgress?.isCancelled)! else { return }
-                    self.queueProgress?.totalUnitCount += 1
+                    if self.queueCompletionHandler != nil && self.queueProgress?.fractionCompleted == 1.0
+                    {
+                        self.queueCompletionHandler!()
+                    }
+                    completionHandler(data, response, error)
                 })
-                self.tasks?.setObject(dataTask! as URLSessionDataTask, forKey: String(parameters.hashValue) as NSCopying)
+                if dataTask != nil
+                {
+                    if !(self.queueProgress?.isCancelled)!
+                    {
+                        self.queueProgress?.totalUnitCount += 1
+                    }
+                    self.tasks?.setObject(dataTask! as URLSessionDataTask, forKey: String(parameters.hashValue) as NSCopying)
+                }
                 dataTask?.resume()
             case .HTTPMethodPOST:
                 let request = HTNetworkConfiguration.getConfiguredPostRequest(url: baseURL, parameters: parameters)
@@ -94,24 +108,42 @@ class HTHTTPRequestQueue: NSObject, URLSessionDelegate
                     return
 
                 }
-                guard configurationHandler != nil else { return }
-                configurationHandler!(request!)
+                if configurationHandler != nil
+                {
+                    configurationHandler!(request!)
+                }
                 let dataTask = self.session?.dataTask(with: request!, completionHandler: { (data, response, error) in
-                    guard (self.queueProgress?.isCancelled)! else { return }
-                    self.queueProgress?.completedUnitCount += 1
+                    if !(self.queueProgress?.isCancelled)!
+                    {
+                        self.queueProgress?.completedUnitCount += 1
+                    }
                     //更新队列进度
-                    guard self.queueProgressHandler != nil else { return }
-                    self.queueProgressHandler!(self.queueProgress!)
+                    if self.queueProgressHandler != nil
+                    {
+                        self.queueProgressHandler!(self.queueProgress!)
+                    }
                     //队列完成
-                    guard self.queueCompletionHandler != nil && self.queueProgress?.fractionCompleted == 1.0 else { return }
-                    self.queueCompletionHandler!()
+                    if self.queueCompletionHandler != nil && self.queueProgress?.fractionCompleted == 1.0
+                    {
+                        self.queueCompletionHandler!()
+                    }
+                    completionHandler(data, response, error)
                 })
-                self.tasks?.setObject(dataTask! as URLSessionDataTask, forKey: String(parameters.hashValue) as NSCopying)
+                if dataTask != nil
+                {
+                    if !(self.queueProgress?.isCancelled)!
+                    {
+                        self.queueProgress?.totalUnitCount += 1
+                    }
+                    self.tasks?.setObject(dataTask! as URLSessionDataTask, forKey: String(parameters.hashValue) as NSCopying)
+                }
                 dataTask?.resume()
         }
         //更新队列进度
-        guard self.queueProgressHandler != nil else { return }
-        self.queueProgressHandler!(self.queueProgress!)
+        if self.queueProgressHandler != nil
+        {
+            self.queueProgressHandler!(self.queueProgress!)
+        }
     }
     
     /**

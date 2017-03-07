@@ -1,5 +1,5 @@
 //
-//  HTHTTPUploadQueue.swift
+//  HTUploadQueue.swift
 //  HTNetworking
 //
 //  Created by heming on 17/3/3.
@@ -15,7 +15,7 @@
 
 import Foundation
 
-class HTHTTPUploadQueue: NSObject, URLSessionTaskDelegate, URLSessionDataDelegate
+class HTUploadQueue: NSObject, URLSessionTaskDelegate, URLSessionDataDelegate
 {
     //队列进度
     var queueProgress: Progress?
@@ -33,7 +33,7 @@ class HTHTTPUploadQueue: NSObject, URLSessionTaskDelegate, URLSessionDataDelegat
      */
     override init()
     {
-        _ = HTHTTPUploadQueue(URLSessionConfiguration: URLSessionConfiguration.default)
+        _ = HTUploadQueue(URLSessionConfiguration: URLSessionConfiguration.default)
     }
     
     /**
@@ -42,7 +42,7 @@ class HTHTTPUploadQueue: NSObject, URLSessionTaskDelegate, URLSessionDataDelegat
      */
     init(URLSessionConfiguration configuration: URLSessionConfiguration)
     {
-        _ = HTHTTPUploadQueue(URLSessionConfiguration: configuration, progressHandler: nil, completionHandler: nil)
+        _ = HTUploadQueue(URLSessionConfiguration: configuration, progressHandler: nil, completionHandler: nil)
     }
     
     /**
@@ -52,7 +52,7 @@ class HTHTTPUploadQueue: NSObject, URLSessionTaskDelegate, URLSessionDataDelegat
      */
     init(queueProgressHandler progressHandler: HTQueueProgressHandler?, completionHandler: HTQueueCompletionHandler?)
     {
-        _ = HTHTTPUploadQueue(URLSessionConfiguration: URLSessionConfiguration.default, progressHandler: progressHandler, completionHandler: completionHandler)
+        _ = HTUploadQueue(URLSessionConfiguration: URLSessionConfiguration.default, progressHandler: progressHandler, completionHandler: completionHandler)
     }
     
     /**
@@ -322,13 +322,13 @@ class HTHTTPUploadQueue: NSObject, URLSessionTaskDelegate, URLSessionDataDelegat
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)
     {
         let key = self.getTaskIdentify(withTask: task)
-        let taskInfo = tasks?[key] as! NSDictionary
-        if taskInfo.count != 0
+        let taskInfo = tasks?[key] as! NSDictionary?
+        if taskInfo != nil
         {
-            let handler = taskInfo["CompletionHandler"] as! HTURLUploadCompletionHandler?
+            let handler = taskInfo?["CompletionHandler"] as! HTURLUploadCompletionHandler?
             if handler != nil
             {
-                handler!(taskInfo["ResponseData"] as? Data, task.response, error)
+                handler!(taskInfo?["ResponseData"] as? Data, task.response, error)
             }
             //更新队列进度
             if !(queueProgress?.isCancelled)!
@@ -346,10 +346,10 @@ class HTHTTPUploadQueue: NSObject, URLSessionTaskDelegate, URLSessionDataDelegat
     func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64)
     {
         let key = self.getTaskIdentify(withTask: task)
-        let taskInfo = tasks?[key] as! NSDictionary
-        if taskInfo.count != 0
+        let taskInfo = tasks?[key] as! NSDictionary?
+        if taskInfo != nil
         {
-            let handler = taskInfo["ProgressHandler"] as! HTProgressHandler?
+            let handler = taskInfo?["ProgressHandler"] as! HTProgressHandler?
             if handler != nil
             {
                 let progress = Progress(totalUnitCount: totalBytesExpectedToSend)

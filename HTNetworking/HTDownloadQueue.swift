@@ -1,5 +1,5 @@
 //
-//  HTHTTPDownloadQueue.swift
+//  HTDownloadQueue.swift
 //  HTNetworking
 //
 //  Created by heming on 17/3/2.
@@ -14,7 +14,7 @@
  ************************************************/
 import Foundation
 
-class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadDelegate
+class HTDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadDelegate
 {
     //队列进度
     var queueProgress: Progress?
@@ -39,7 +39,7 @@ class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadD
      */
     override init()
     {
-        _ = HTHTTPDownloadQueue(URLSessionConfiguration: URLSessionConfiguration.default)
+        _ = HTDownloadQueue(URLSessionConfiguration: URLSessionConfiguration.default)
     }
     
     /**
@@ -48,7 +48,7 @@ class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadD
      */
     init(URLSessionConfiguration configuration: URLSessionConfiguration)
     {
-        _ = HTHTTPDownloadQueue(URLSessionConfiguration: configuration, progressHandler: nil, completionHandler: nil)
+        _ = HTDownloadQueue(URLSessionConfiguration: configuration, progressHandler: nil, completionHandler: nil)
     }
     
     /**
@@ -58,7 +58,7 @@ class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadD
      */
     init(queueProgressHandler progressHandler:HTQueueProgressHandler?, completionHandler: HTQueueCompletionHandler?)
     {
-        _ = HTHTTPDownloadQueue(URLSessionConfiguration: URLSessionConfiguration.default, progressHandler: progressHandler, completionHandler: completionHandler)
+        _ = HTDownloadQueue(URLSessionConfiguration: URLSessionConfiguration.default, progressHandler: progressHandler, completionHandler: completionHandler)
     }
     
     /**
@@ -103,21 +103,31 @@ class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadD
         }
         let downloadTask = session?.downloadTask(with: url!)
         let taskInfo = NSMutableDictionary()
-        guard downloadTask != nil else { return }
-        taskInfo["Task"] = downloadTask
-        guard progressHandler != nil else { return }
-        taskInfo["ProgressHandler"] = progressHandler
-        guard completionHandler != nil else { return }
-        taskInfo["CompletionHandler"] = completionHandler
+        if downloadTask != nil
+        {
+            taskInfo["Task"] = downloadTask
+        }
+        if progressHandler != nil
+        {
+            taskInfo["ProgressHandler"] = progressHandler
+        }
+        if completionHandler != nil
+        {
+            taskInfo["CompletionHandler"] = completionHandler
+        }
         myLock?.lock()
         let key = String(urlString.hashValue)
         self.tasks?[key] = taskInfo
         myLock?.unlock()
         //更新进度
-        guard (queueProgress?.isCancelled)! else { return }
-        queueProgress?.totalUnitCount += 1
-        guard queueProgressHandler != nil else { return }
-        queueProgressHandler!(queueProgress!)
+        if !(queueProgress?.isCancelled)!
+        {
+            queueProgress?.totalUnitCount += 1
+        }
+        if queueProgressHandler != nil
+        {
+            queueProgressHandler!(queueProgress!)
+        }
         downloadTask?.resume()
     }
     
@@ -165,12 +175,14 @@ class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadD
         let key = String(urlString.hashValue)
         myLock?.lock()
         let taskInfo = (self.tasks?[key] as! NSDictionary).mutableCopy()
-        guard progressHandler != nil else
+        if progressHandler != nil
+        {
+            (taskInfo as! NSMutableDictionary)["ProgressHandler"] = progressHandler
+        }
+        else
         {
             (taskInfo as! NSMutableDictionary).removeObject(forKey: "ProgressHandler")
-            return
         }
-        (taskInfo as! NSMutableDictionary)["ProgressHandler"] = progressHandler
         self.tasks?[key] = taskInfo
         myLock?.unlock()
     }
@@ -240,8 +252,10 @@ class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadD
         myLock?.unlock()
         queueProgress?.completedUnitCount = 0
         queueProgress?.totalUnitCount = 0
-        guard queueCompletionHandler != nil else { return }
-        queueCompletionHandler!()
+        if queueCompletionHandler != nil
+        {
+            queueCompletionHandler!()
+        }
     }
 
     /**
@@ -265,8 +279,10 @@ class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadD
             myLock?.unlock()
             guard taskInfo != nil else { return }
             let handler = taskInfo?["CompletionHandler"] as! HTURLDownloadCompletionHandler?
-            guard handler != nil else { return }
-            handler!(nil, task.response, error)
+            if handler != nil
+            {
+                handler!(nil, task.response, error)
+            }
         }
     }
     
@@ -279,14 +295,20 @@ class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadD
         myLock?.unlock()
         guard taskInfo != nil else { return }
         let handler = taskInfo?["CompletionHandler"] as! HTURLDownloadCompletionHandler?
-        guard handler != nil else { return }
-        handler!(location, downloadTask.response, downloadTask.error)
+        if handler != nil
+        {
+            handler!(location, downloadTask.response, downloadTask.error)
+        }
         //更新队列进度
-        guard (queueProgress?.isCancelled)! else { return }
-        queueProgress?.completedUnitCount += 1
+        if !(queueProgress?.isCancelled)!
+        {
+            queueProgress?.completedUnitCount += 1
+        }
         //队列完成
-        guard queueCompletionHandler != nil && queueProgress?.fractionCompleted == 1.0 else { return }
-        queueCompletionHandler!()
+        if queueCompletionHandler != nil && queueProgress?.fractionCompleted == 1.0
+        {
+            queueCompletionHandler!()
+        }
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)
@@ -297,9 +319,11 @@ class HTHTTPDownloadQueue: NSObject, URLSessionTaskDelegate, URLSessionDownloadD
         myLock?.unlock()
         guard taskInfo != nil else { return }
         let handler = taskInfo?["ProgressHandler"] as! HTProgressHandler?
-        guard handler != nil else { return }
-        let progress = Progress.init(totalUnitCount: totalBytesExpectedToWrite)
-        progress.completedUnitCount = totalBytesWritten
-        handler!(progress)
+        if handler != nil
+        {
+            let progress = Progress.init(totalUnitCount: totalBytesExpectedToWrite)
+            progress.completedUnitCount = totalBytesWritten
+            handler!(progress)
+        }
     }
 }

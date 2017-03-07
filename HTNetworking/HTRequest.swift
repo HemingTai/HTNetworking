@@ -1,5 +1,5 @@
 //
-//  HTHTTPRequest.swift
+//  HTRequest.swift
 //  HTNetworking
 //
 //  Created by heming on 17/2/24.
@@ -13,7 +13,7 @@
 
 import Foundation
 
-class HTHTTPRequest: NSObject
+class HTRequest: NSObject
 {
     /**
      添加请求
@@ -49,8 +49,10 @@ class HTHTTPRequest: NSObject
                     url = URL(string: parameters, relativeTo: baseUrl)!
                 }
                 let request = URLRequest(url: url)
-                guard configurationHandler != nil else { return nil }
-                configurationHandler!(request)
+                if configurationHandler != nil
+                {
+                    configurationHandler!(request)
+                }
                 let session = URLSession.shared
                 let dataTask = session.dataTask(with: request, completionHandler:
                     completionHandler!)
@@ -63,8 +65,10 @@ class HTHTTPRequest: NSObject
                 {
                     request.httpBody = parameters.data(using: String.Encoding.utf8)
                 }
-                guard configurationHandler != nil else { return nil }
-                configurationHandler!(request)
+                if configurationHandler != nil
+                {
+                    configurationHandler!(request)
+                }
                 let dataTask = URLSession.shared.dataTask(with: request, completionHandler: completionHandler!)
                 dataTask.resume()
                 return dataTask
@@ -100,8 +104,10 @@ class HTHTTPRequest: NSObject
             completionHandler!(nil, nil, nil)
             return nil
         }
-        guard configurationHandler != nil else { return nil }
-        configurationHandler!(request!)
+        if configurationHandler != nil
+        {
+            configurationHandler!(request!)
+        }
         let configuration = HTNetworkConfiguration.getSessionConfiguration()
         let session = URLSession(configuration: configuration)
         let dataTask = session.dataTask(with: request!, completionHandler: completionHandler!)
@@ -125,8 +131,10 @@ class HTHTTPRequest: NSObject
             return nil
         }
         let request = HTNetworkConfiguration.getConfiguredPostRequest(url: url, parameters: parameters)
-        guard configurationHandler != nil else { return nil }
-        configurationHandler!(request!)
+        if configurationHandler != nil
+        {
+            configurationHandler!(request!)
+        }
         let configuration = HTNetworkConfiguration.getSessionConfiguration()
         let session = URLSession(configuration: configuration)
         let dataTask = session.dataTask(with: request!, completionHandler: completionHandler!)
@@ -187,8 +195,10 @@ class HTHTTPRequest: NSObject
             completionHandler!(nil, nil, nil)
         }
         let request = HTNetworkConfiguration.getConfiguredPostRequest(url: url, parameters: parameters)
-        guard configurationHandler != nil else { return }
-        configurationHandler!(request!)
+        if configurationHandler != nil
+        {
+            configurationHandler!(request!)
+        }
         let configuration = HTNetworkConfiguration.getSessionConfiguration()
         let session = URLSession(configuration: configuration)
         let dataTask = session.dataTask(with: request!, completionHandler: completionHandler!)
