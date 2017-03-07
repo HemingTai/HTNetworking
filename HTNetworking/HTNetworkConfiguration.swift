@@ -14,13 +14,13 @@ enum HTTPMethod
     case HTTPMethodPOST
 }
 
-typealias HTConfigurationHandler         = (_ request: URLRequest)->()
-typealias HTProgressHandler              = (_ progress: Progress)->()
-typealias HTQueueProgressHandler         = (_ progress: Progress)->()
-typealias HTURLRequestCompletionHandler  = (_ data: Data?, _ response: URLResponse?, _ error: Error?)->()
-typealias HTURLDownloadCompletionHandler = (_ location: URL?, _ response: URLResponse?, _ error: Error?)->()
-typealias HTURLUploadCompletionHandler   = (_ data: Data?, _ response: URLResponse?, _ error: Error?)->()
-typealias HTQueueCompletionHandler       = ()->()
+typealias HTConfigurationHandler         = (_ request: URLRequest)->Void
+typealias HTProgressHandler              = (_ progress: Progress)->Void
+typealias HTQueueProgressHandler         = (_ progress: Progress)->Void
+typealias HTURLRequestCompletionHandler  = (_ data: Data?, _ response: URLResponse?, _ error: Error?)->Void
+typealias HTURLDownloadCompletionHandler = (_ location: URL?, _ response: URLResponse?, _ error: Error?)->Void
+typealias HTURLUploadCompletionHandler   = (_ data: Data?, _ response: URLResponse?, _ error: Error?)->Void
+typealias HTQueueCompletionHandler       = ()->Void
 
 class HTNetworkConfiguration: NSObject
 {
